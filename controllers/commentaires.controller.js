@@ -48,7 +48,7 @@ function parVisiteur(req, res, next) {
 
 function trouver(req, res, next) {
   const id = Number(req.params.id);
-    if (!id){
+    if (!articleId){
     return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
   }
   service.trouver(id)
@@ -59,7 +59,7 @@ function trouver(req, res, next) {
 
 function modifier(req, res, next) {
   const id = Number(req.params.id);
-      if (!id){
+      if (!articleId){
     return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
   }
   const { texte } = req.body || {};
@@ -69,10 +69,10 @@ function modifier(req, res, next) {
     .catch(next);
 }
 
-
+// DELETE /api/commentaires/:id
 function supprimer(req, res, next) {
   const id = Number(req.params.id);
-      if (!id){
+      if (!articleId){
     return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
   }
   service.supprimer(id)
