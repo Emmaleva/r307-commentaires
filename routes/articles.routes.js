@@ -14,5 +14,6 @@ router.get('/:id', controleur.trouver);      // lire un, avec ?champs=
 router.post('/', controleur.creer);          // creer
 router.patch('/:id', controleur.modifier);   // modifier en partie
 router.delete('/:id', controleur.supprimer); // supprimer
+router.patch('/commentaires/:id', verifierJeton, controleur.modifier);
 
 module.exports = router;
