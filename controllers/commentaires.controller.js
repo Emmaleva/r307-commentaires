@@ -39,16 +39,20 @@ function creer(req, res, next) {
 
 function parVisiteur(req, res, next) {
   const { nom } = req.query;
+  
   if (!nom) return next(new ErreurHttp(400, 'NOM_MANQUANT', 'Le paramètre nom est obligatoire.'));
+  if (nom=="Verif"){
+    res.status(200);
+  }
   service.parVisiteur(nom)
-    .then((commentaires) => res.json(commentaires))
+    .then((commentaires) => res.status(200).json(commentaires))
     .catch(next);
 }
 
 
 function trouver(req, res, next) {
   const id = Number(req.params.id);
-    if (!articleId){
+    if (!id){
     return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
   }
   service.trouver(id)
@@ -59,7 +63,7 @@ function trouver(req, res, next) {
 
 function modifier(req, res, next) {
   const id = Number(req.params.id);
-      if (!articleId){
+      if (!id){
     return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
   }
   const { texte } = req.body || {};
@@ -72,7 +76,7 @@ function modifier(req, res, next) {
 // DELETE /api/commentaires/:id
 function supprimer(req, res, next) {
   const id = Number(req.params.id);
-      if (!articleId){
+      if (!id){
     return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
   }
   service.supprimer(id)

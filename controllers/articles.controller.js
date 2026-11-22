@@ -21,7 +21,7 @@ function lister(req, res, next) {
 // POST /api/articles
 function creer(req, res, next) {
   const { titre, categorie, auteur, contenu } = req.body || {};
-  if (!titre) return next(new ErreurHttp(400, 'TITRE_MANQUANT', 'Le champ titre est obligatoire.'));
+  if (!titre ) return next(new ErreurHttp(400, 'TITRE_MANQUANT', 'Le champ titre est obligatoire.'));
   service.creer({ titre, categorie, auteur, contenu })
     .then((article) => res.status(201).json(article))
     .catch(next);
