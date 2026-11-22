@@ -13,8 +13,8 @@ const ErreurHttp = require('../utils/erreur-http');
 
 function lister(req, res, next) {
   const articleId = Number(req.params.id); 
-  if (!articleId){
-    return next(new ErreurHttp(400, 'ARTICLE_ID_MANQUANT', 'ARTICLE_ID_MANQUANT'));
+  if (!Number.isInteger(articleId) || articleId <= 0) {
+    return next(new ErreurHttp(400, 'ARTICLE_INTROUVABLE', 'Identifiant d’article invalide.'));
   }
   service.lister(articleId)
     .then((commentaires) => res.json(commentaires))
@@ -24,8 +24,8 @@ function lister(req, res, next) {
 
 function creer(req, res, next) {
   const articleId = Number(req.params.id);
-    if (!articleId){
-    return next(new ErreurHttp(400, 'ARTICLE_ID_MANQUANT', 'ARTICLE_ID_MANQUANT'));
+  if (!Number.isInteger(articleId) || articleId <= 0) {
+    return next(new ErreurHttp(404, 'ARTICLE_INTROUVABLE', 'Article introuvable.'));
   }
   const { nom, texte } = req.body || {};
   if (!nom || !texte) {
@@ -39,11 +39,7 @@ function creer(req, res, next) {
 
 function parVisiteur(req, res, next) {
   const { nom } = req.query;
-  
   if (!nom) return next(new ErreurHttp(400, 'NOM_MANQUANT', 'Le paramètre nom est obligatoire.'));
-  if (nom=="Verif"){
-    res.status(200);
-  }
   service.parVisiteur(nom)
     .then((commentaires) => res.status(200).json(commentaires))
     .catch(next);
@@ -52,8 +48,8 @@ function parVisiteur(req, res, next) {
 
 function trouver(req, res, next) {
   const id = Number(req.params.id);
-    if (!id){
-    return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
+  if (!Number.isInteger(id) || id <= 0) {
+    return next(new ErreurHttp(404, 'COMMENTAIRE_INTROUVABLE', 'Commentaire introuvable.'));
   }
   service.trouver(id)
     .then((commentaire) => res.json(commentaire))
@@ -63,8 +59,8 @@ function trouver(req, res, next) {
 
 function modifier(req, res, next) {
   const id = Number(req.params.id);
-      if (!id){
-    return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
+  if (!Number.isInteger(id) || id <= 0) {
+    return next(new ErreurHttp(404, 'COMMENTAIRE_INTROUVABLE', 'Commentaire introuvable.'));
   }
   const { texte } = req.body || {};
   if (!texte) return next(new ErreurHttp(400, 'TEXTE_MANQUANT', 'Le champ texte est obligatoire.'));
@@ -76,8 +72,8 @@ function modifier(req, res, next) {
 // DELETE /api/commentaires/:id
 function supprimer(req, res, next) {
   const id = Number(req.params.id);
-      if (!id){
-    return next(new ErreurHttp(400, 'COMM_ID_MANQUANT', 'COMM_ID_MANQUANT'));
+  if (!Number.isInteger(id) || id <= 0) {
+    return next(new ErreurHttp(404, 'COMMENTAIRE_INTROUVABLE', 'Commentaire introuvable.'));
   }
   service.supprimer(id)
     .then(() => res.status(204).end())
