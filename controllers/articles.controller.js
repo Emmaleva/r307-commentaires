@@ -16,16 +16,7 @@ function lister(req, res, next) {
     .catch(next);
 }
 
-// GET /api/articles/:id?champs=titre,date
-function trouver(req, res, next) {
-  const id = Number(req.params.id); // req.params est toujours du texte
-  
-  const champs = req.query.champs ? req.query.champs.split(',') : null;
-  if (!champs || !req.params.id ) return next(new ErreurHttp(400, 'CHAMPS_OU_ID_MANQUANT', 'Un des champs ou l id est manquant.'));
-  service.trouver(id, champs)
-    .then((article) => res.json(article))
-    .catch(next);
-}
+
 
 // POST /api/articles
 function creer(req, res, next) {
@@ -39,8 +30,24 @@ function creer(req, res, next) {
 // PATCH /api/articles/:id
 function modifier(req, res, next) {
   const id = Number(req.params.id);
-  if (!req.body || !req.params.id ) return next(new ErreurHttp(400, 'CHAMPS_OU_ID_MANQUANT', 'Un des champs ou l id est manquant.'));
+  /*
+  if (!req.query.champs){
+    return trouver(req,res,next);
+  }*/
+  if (!req.params.id ) return next(new ErreurHttp(400, 'CHAMPS_OU_ID_MANQUANT', 'Un des champs ou l id est manquant.'));
   service.modifier(id, req.body || {})
+    .then((article) => res.json(article))
+    .catch(next);
+}
+
+// GET /api/articles/:id?champs=titre,date
+function trouver(req, res, next) {
+  const id = Number(req.params.id); // req.params est toujours du texte
+  
+  const champs = req.query.champs ? req.query.champs.split(',') : null;
+  if (!champs) return next(new ErreurHttp(400, 'CHAMPS_MANQUANT', 'Un des champs est manquant.'));
+  console.log(champs);
+  service.trouver(id, champs)
     .then((article) => res.json(article))
     .catch(next);
 }
